@@ -8,6 +8,7 @@
 		title="BookView" >
 	<fx:Script>
 		<![CDATA[
+			// TODO: move this into an abstract class
 			import mx.events.FlexEvent;
 			
 			protected function creationCompleteHandler(event:FlexEvent):void

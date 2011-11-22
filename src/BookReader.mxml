@@ -1,74 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
-			   xmlns:s="library://ns.adobe.com/flex/spark" 
-			   xmlns:mx="library://ns.adobe.com/flex/mx"
-			   applicationDPI="320" 
-			   preinitialize="preinitializeHandler(event)"
-			   creationComplete="creationCompleteHandler(event)">
-	
-	<fx:Script>
-		<![CDATA[
-			import mx.events.FlexEvent;
-			
-			import spark.components.View;
-			
-			import uk.co.moilin.eLyfrLib.data.SeriesData;
-			import uk.co.moilin.eLyfrLib.events.BookReaderEvent;
-			import uk.co.moilin.eLyfrLib.model.AssetCache;
-			import uk.co.moilin.eLyfrLib.model.AppModel;
-			import uk.co.moilin.eLyfrLib.ui.BookView;
-			import uk.co.moilin.eLyfrLib.ui.MenuView;
-			
-			[Bindable]
-			public var seriesDataFile:String;
-			[Bindable]
-			private var seriesData:SeriesData;
-			private var rawSeriesData:XML;
-			
-			protected function preinitializeHandler(event:FlexEvent):void
-			{
-				// app initialisation
-			}
-			
-			protected function creationCompleteHandler(event:FlexEvent):void
-			{
-				var fileLoader:URLLoader = new URLLoader();
-				fileLoader.dataFormat = URLLoaderDataFormat.TEXT;
-				fileLoader.addEventListener(Event.COMPLETE, configLoadedHandler);
-				fileLoader.load(new URLRequest("testbooks.xml"));
-			}
-			
-			protected function configLoadedHandler(event:Event):void
-			{
-				AppModel.theStage = this.stage;
-				
-				// Parse config data
-				rawSeriesData = new XML(URLLoader(event.target).data);
-				seriesData = new SeriesData(rawSeriesData);
-				
-				// TODO: set orientation policy based on config data
-				
-				// Set up the menu
-				mainView.pushView(MenuView,seriesData);
-				mainView.visible = true;
-				mainView.addEventListener(BookReaderEvent.ITEM_SELECTED, menuItemSelectedHandler);
-			}
-			
-			protected function menuItemSelectedHandler(event:BookReaderEvent):void
-			{
-				mainView.removeEventListener(BookReaderEvent.ITEM_SELECTED, menuItemSelectedHandler);
-				mainView.popAll();
-				
-				mainView.pushView(BookView, seriesData.books[event.selectedBook]);
-			}
-			
-		]]>
-	</fx:Script>
-	
-	<fx:Declarations>
-		<!-- Place non-visual elements (e.g., services, value objects) here -->
-	</fx:Declarations>
+<eLyfrLib:BookReader xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					 xmlns:s="library://ns.adobe.com/flex/spark" 
+					 xmlns:mx="library://ns.adobe.com/flex/mx"
+					 xmlns:eLyfrLib="uk.co.moilin.eLyfrLib.*"
+					 applicationDPI="320">
 	
 	<s:ViewNavigator id="mainView" visible="false" width="100%" height="100%" transitionsEnabled="false"/>
 	
-</s:Application>
+</eLyfrLib:BookReader>

@@ -15,6 +15,8 @@
     <classEntry path="uk.co.moilin.eLyfrLib.ui.components.MenuItemRenderer"/>
     <classEntry path="uk.co.moilin.eLyfrLib.model.AppModel"/>
     <classEntry path="uk.co.moilin.eLyfrLib.model.AssetCache"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.BookReader"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.ui.components.Viewer"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

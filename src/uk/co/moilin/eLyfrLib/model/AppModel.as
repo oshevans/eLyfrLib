@@ -23,18 +23,25 @@ package uk.co.moilin.eLyfrLib.model
 		
 		public static function getHeight():Number
 		{
+			// TODO: this needs to take into consideration the Android nav bar (as per sony S) - could code exist in Sony P API for detecting it's presence?
+			var rtrn:Number = 0;
 			if(orientation == StageAspectRatio.PORTRAIT)
-				return Capabilities.screenResolutionY > Capabilities.screenResolutionX ? Capabilities.screenResolutionY : Capabilities.screenResolutionX;
+				rtrn = Capabilities.screenResolutionY > Capabilities.screenResolutionX ? Capabilities.screenResolutionY : Capabilities.screenResolutionX;
 			else
-				return Capabilities.screenResolutionY < Capabilities.screenResolutionX ? Capabilities.screenResolutionY : Capabilities.screenResolutionX;
+				rtrn = Capabilities.screenResolutionY < Capabilities.screenResolutionX ? Capabilities.screenResolutionY : Capabilities.screenResolutionX;
+			trace("HEIGHT: "+rtrn);			
+			return rtrn;
 		}
 		
 		public static function getWidth():Number
 		{
+			var rtrn:Number = 0;
 			if(orientation == StageAspectRatio.LANDSCAPE)
-				return Capabilities.screenResolutionX > Capabilities.screenResolutionY ? Capabilities.screenResolutionX : Capabilities.screenResolutionY;
+				rtrn = Capabilities.screenResolutionX > Capabilities.screenResolutionY ? Capabilities.screenResolutionX : Capabilities.screenResolutionY;
 			else
-				return Capabilities.screenResolutionX < Capabilities.screenResolutionY ? Capabilities.screenResolutionX : Capabilities.screenResolutionY;
+				rtrn = Capabilities.screenResolutionX < Capabilities.screenResolutionY ? Capabilities.screenResolutionX : Capabilities.screenResolutionY;
+			trace("WIDTH: "+rtrn);
+			return rtrn;
 		}
 	}
 }

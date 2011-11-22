@@ -6,6 +6,7 @@
 		title="MenuView">
 	<fx:Script>
 		<![CDATA[
+			// TODO: move this into an abstract class
 			import mx.collections.ArrayCollection;
 			import mx.events.FlexEvent;
 			
