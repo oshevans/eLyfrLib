@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
+  <includeClasses>
+    <classEntry path="uk.co.moilin.eLyfrLib.ui.components.PageItemRenderer"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.ui.components.BookViewer"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.ui.components.NavPopup"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.data.PageData"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.data.BookData"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.data.PageSpreadData"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.ui.BookView"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.ui.MenuView"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.data.SeriesData"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.data.ThemeStyles"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.events.BookReaderEvent"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.ui.components.MenuItemRenderer"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.model.AppModel"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.model.AssetCache"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009"
+				xmlns:s="library://ns.adobe.com/flex/spark"
+				xmlns:mx="library://ns.adobe.com/flex/mx"
+				autoDrawBackground="false">
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.SWFLoader;
+			import mx.events.FlexEvent;
+			import mx.states.OverrideBase;
+			
+			import uk.co.moilin.eLyfrLib.data.PageData;
+			import uk.co.moilin.eLyfrLib.data.PageSpreadData;
+			import uk.co.moilin.eLyfrLib.model.AssetCache;
+			import uk.co.moilin.eLyfrLib.model.AppModel;
+			
+			private var swfLoader1:SWFLoader;
+			private var swfLoader2:SWFLoader;
+			private var spreadData:PageSpreadData;
+			
+			override public function set data(value:Object):void
+			{
+				super.data = value;
+
+				spreadData = data as PageSpreadData;
+
+				this.width = AppModel.getWidth();
+				this.height = AppModel.getHeight();
+
+				// Init image
+				swfContainer.removeAllElements(); // Cleanup
+
+				swfLoader1 = AssetCache.getSWFLoaderInstance(spreadData.page1.pageImageURL);
+				swfLoader1.width = AppModel.getWidth();
+				swfLoader1.height = AppModel.getHeight();
+
+				swfContainer.addElement(swfLoader1);
+
+				if(!spreadData.isSingle)
+				{
+					swfLoader1.width = AppModel.getWidth()/2;
+					swfLoader2 = AssetCache.getSWFLoaderInstance(spreadData.page2.pageImageURL);
+					swfLoader2.width = AppModel.getWidth()/2;
+					swfLoader2.height = AppModel.getHeight();
+					
+					swfContainer.addElement(swfLoader2);
+				}
+			}
+			
+			public function resetSizes():void
+			{
+				this.width = AppModel.getWidth();
+				this.height = AppModel.getHeight();
+				
+				swfLoader1.width = AppModel.getWidth();
+				swfLoader1.height = AppModel.getHeight();
+				
+				if(!spreadData.isSingle)
+				{
+					swfLoader1.width = AppModel.getWidth()/2;
+					swfLoader2.width = AppModel.getWidth()/2;
+					swfLoader2.height = AppModel.getHeight();
+				}
+			}
+			
+		]]>
+	</fx:Script>
+	<s:HGroup id="swfContainer" 
+			  width="100%" height="100%"
+			  horizontalAlign="center" verticalAlign="middle">
+	</s:HGroup>
+	
+</s:ItemRenderer>

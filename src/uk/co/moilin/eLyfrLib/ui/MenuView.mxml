@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		creationComplete="creationCompleteHandler(event)"
+		actionBarVisible="false"
+		title="MenuView">
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			
+			import spark.events.IndexChangeEvent;
+			
+			import uk.co.moilin.eLyfrLib.data.SeriesData;
+			import uk.co.moilin.eLyfrLib.events.BookReaderEvent;
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				var seriesData:SeriesData = data as SeriesData;
+				seriesTitle.text = seriesData.title;
+				// TODO: create itemRenderer for items
+				bookList.dataProvider = new ArrayCollection(seriesData.books);
+				// TODO: sort out infoText to be half width and to wrap
+				infoText.text = seriesData.infoText;
+				
+				// TODO: font size should be based on device DPI
+				
+				// TODO initialise logo
+				// TODO initialise audio checkbox
+			}
+			
+			protected function bookListChangeHandler(event:IndexChangeEvent):void
+			{
+				dispatchEvent(new BookReaderEvent(BookReaderEvent.ITEM_SELECTED,true,true,event.newIndex));
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:Group width="100%" height="200">
+		<s:Rect width="100%" height="100%">
+			<s:fill>
+				<s:SolidColor color="#003300"/>
+			</s:fill>
+		</s:Rect>
+		<s:Label id="seriesTitle" x="60" text="Series Title" fontSize="60" height="100%" verticalAlign="middle" color="#ffffff"/>
+	</s:Group>
+	<s:List id="bookList" 
+			width="70%" height="50%" horizontalCenter="0" verticalCenter="0"
+			horizontalScrollPolicy="off"
+			itemRenderer="uk.co.moilin.eLyfrLib.ui.components.MenuItemRenderer"
+			contentBackgroundColor="#ffffff"
+			change="bookListChangeHandler(event)" />
+	<s:CalloutButton bottom="10" left="10" label="info">
+		<s:Label id="infoText" x="10" y="10" text="info"/>
+	</s:CalloutButton>
+</s:View>

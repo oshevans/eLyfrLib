@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:mx="library://ns.adobe.com/flex/mx"
+		 xmlns:ui="uk.co.moilin.eLyfrLib.ui.*"
+		 xmlns:components="uk.co.moilin.eLyfrLib.ui.components.*"
+		 creationComplete="creationCompleteHandler(event)"
+		 width="100%" height="100%">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.events.FlexEvent;
+			import mx.events.TouchInteractionEvent;
+			
+			import uk.co.moilin.eLyfrLib.data.BookData;
+			import uk.co.moilin.eLyfrLib.data.PageData;
+			import uk.co.moilin.eLyfrLib.data.PageSpreadData;
+			import uk.co.moilin.eLyfrLib.model.AssetCache;
+			import uk.co.moilin.eLyfrLib.model.AppModel;
+			
+			private var _bookData:BookData
+			private var _pageSpreadData:ArrayCollection;
+			
+			private var _pageAudio:Sound;
+			
+			public function set bookData(value:BookData):void
+			{
+				_bookData = value;
+				
+				AssetCache.initialiseCache(_bookData.pages);
+
+				_pageSpreadData = new ArrayCollection(initPageSpreadData());
+				
+				pageViewer.dataProvider = _pageSpreadData;
+			}
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				AppModel.theStage.addEventListener(StageOrientationEvent.ORIENTATION_CHANGE, orientationChangeHandler,false,0,true);
+				
+				playAudio();
+			}
+			
+			protected function orientationChangeHandler(event:StageOrientationEvent):void
+			{
+				// TODO: update pageView dataProvider with single or double spread data
+				// TODO: use currPage to keep track of page when changing orientation
+				// TODO: update sizes for pageViewer and it's items
+				trace("Watch out, we've been tipped to "+event.afterOrientation+" orientation.");
+			}
+			
+			protected function pageChangedHandler(event:TouchInteractionEvent):void
+			{
+// TODO: use code from S4C DailyView to get currently viewed PageItemRenderer
+				trace("NEED TO GET CURRENT PAGE BEIGN DISPLAYED");
+				_pageAudio  = new Sound(new URLRequest(PageData(_bookData.pages[0]).pageAudioURL));
+				playAudio();
+			}
+			
+			private function playAudio():void
+			{
+				if(_pageAudio != null)
+					_pageAudio.play();
+			}
+			
+			private function initPageSpreadData():Array
+			{
+				var numPages:uint = _bookData.pages.length;
+				var spreadData:Array = new Array();
+				
+				for (var i:uint=0 ; i < numPages ; i++)
+				{
+					// TODO: how to get reference to Stage?
+					if(AppModel.orientation == StageAspectRatio.PORTRAIT)
+					{
+						spreadData.push(new PageSpreadData(_bookData.pages[i]));
+					} else {
+						spreadData.push(new PageSpreadData(_bookData.pages[i], _bookData.pages[++i]));
+					}
+				}
+
+				return spreadData;
+			}
+			
+		]]>
+	</fx:Script>
+	
+	<s:List id="pageViewer" 
+			width="100%" height="100%" horizontalCenter="0" verticalCenter="0"
+			verticalScrollPolicy="off" pageScrollingEnabled="true"
+			selectionColor="#ffffff"
+			touchInteractionEnd="pageChangedHandler(event)"
+			itemRenderer="uk.co.moilin.eLyfrLib.ui.components.PageItemRenderer">
+		<s:layout>
+			<s:HorizontalLayout gap="0" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" verticalAlign="middle" />
+		</s:layout>
+	</s:List>
+</s:Group>
