@@ -2,7 +2,7 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx"
-				alternatingItemColors="[#AA9090,#90AA90]"
+				alternatingItemColors="[#76AD38,#63912F]"
 				autoDrawBackground="true">
 	<fx:Script>
 		<![CDATA[

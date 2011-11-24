@@ -3,6 +3,7 @@ package uk.co.moilin.eLyfrLib.ui.components
 	import flash.display.StageAspectRatio;
 	import flash.events.StageOrientationEvent;
 	import flash.media.Sound;
+	import flash.media.SoundMixer;
 	import flash.net.URLRequest;
 	
 	import mx.collections.ArrayCollection;
@@ -64,9 +65,6 @@ package uk.co.moilin.eLyfrLib.ui.components
 			super.initialize();
 			
 			AppModel.theStage.addEventListener(StageOrientationEvent.ORIENTATION_CHANGE, orientationChangeHandler,false,0,true);
-			
-			setSizes();
-			playAudio();
 		}
 		
 		override protected function childrenCreated():void
@@ -74,6 +72,9 @@ package uk.co.moilin.eLyfrLib.ui.components
 			super.childrenCreated();
 			
 			pageViewer.addEventListener(TouchInteractionEvent.TOUCH_INTERACTION_END, pageChangedHandler, false, 0, true);
+			
+			setSizes();
+			playAudio();
 		}
 		
 		// FUNCTIONS
@@ -121,6 +122,7 @@ package uk.co.moilin.eLyfrLib.ui.components
 		 */
 		protected function playAudio():void
 		{
+			SoundMixer.stopAll();
 			trace("BookReader: playAudio");
 			if(_pageAudio != null)
 				_pageAudio.play();

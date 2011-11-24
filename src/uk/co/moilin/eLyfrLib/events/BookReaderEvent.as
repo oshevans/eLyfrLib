@@ -5,6 +5,7 @@ package uk.co.moilin.eLyfrLib.events
 	public class BookReaderEvent extends Event
 	{
 		public static const ITEM_SELECTED:String = "item_selected"; 
+		public static const HOME_BUTTON_SELECTED:String = "home_button_selected";
 		
 		public var selectedBook:int;
 		

@@ -3,7 +3,7 @@
   <includeClasses>
     <classEntry path="uk.co.moilin.eLyfrLib.ui.components.PageItemRenderer"/>
     <classEntry path="uk.co.moilin.eLyfrLib.ui.components.BookViewer"/>
-    <classEntry path="uk.co.moilin.eLyfrLib.ui.components.NavPopup"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.ui.components.NavPanel"/>
     <classEntry path="uk.co.moilin.eLyfrLib.data.PageData"/>
     <classEntry path="uk.co.moilin.eLyfrLib.data.BookData"/>
     <classEntry path="uk.co.moilin.eLyfrLib.data.PageSpreadData"/>

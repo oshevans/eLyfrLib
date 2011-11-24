@@ -88,9 +88,20 @@ package uk.co.moilin.eLyfrLib
 			rawSeriesData = new XML(URLLoader(event.target).data);
 			seriesData = new SeriesData(rawSeriesData);
 			
-			// TODO: set orientation policy based on config data
+			// TODO: set orientation policy based on config data - e.g. some books are landscape only
 			
 			// Set up the menu
+			initMenu();
+		}
+		
+		/**
+		 * Initialise the menu view 
+		 * 
+		 */
+		private function initMenu():void
+		{
+			trace("BookReader: initMenu");
+			mainView.popAll();
 			mainView.pushView(MenuView,seriesData);
 			mainView.visible = true;
 			mainView.addEventListener(BookReaderEvent.ITEM_SELECTED, menuItemSelectedHandler);
@@ -105,10 +116,24 @@ package uk.co.moilin.eLyfrLib
 		protected function menuItemSelectedHandler(event:BookReaderEvent):void
 		{
 			trace("BookReader: menuItemSelectedHandler");
-			mainView.removeEventListener(BookReaderEvent.ITEM_SELECTED, menuItemSelectedHandler);
-			mainView.popAll();
 			
 			mainView.pushView(BookView, seriesData.books[event.selectedBook]);
+			mainView.addEventListener(BookReaderEvent.HOME_BUTTON_SELECTED, homeSelectedHandler);
+		}
+		
+		/**
+		 * Handles the navigate to home equest
+		 * Opens the menu view  
+		 * @param event
+		 * 
+		 */
+		protected function homeSelectedHandler(event:Event):void
+		{
+			trace("BookReader: homeSelectedHandler");
+			mainView.removeEventListener(BookReaderEvent.HOME_BUTTON_SELECTED, homeSelectedHandler);
+			
+			// Pop to the menu view
+			mainView.popToFirstView();
 		}
 	}
 }

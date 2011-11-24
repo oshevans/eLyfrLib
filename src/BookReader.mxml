@@ -3,7 +3,8 @@
 					 xmlns:s="library://ns.adobe.com/flex/spark" 
 					 xmlns:mx="library://ns.adobe.com/flex/mx"
 					 xmlns:eLyfrLib="uk.co.moilin.eLyfrLib.*"
-					 applicationDPI="320">
+					 applicationDPI="320"
+					 backgroundColor="#7CB439">
 	
 	<s:ViewNavigator id="mainView" visible="false" width="100%" height="100%" transitionsEnabled="false"/>
 	

@@ -8,17 +8,52 @@
 		title="BookView" >
 	<fx:Script>
 		<![CDATA[
-			// TODO: move this into an abstract class
 			import mx.events.FlexEvent;
+			
+			import uk.co.moilin.eLyfrLib.events.BookReaderEvent;
+			
+			protected var hasJustClosed:Boolean = false;
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
-				// TODO: initialise the nav bar
+				this.addEventListener(MouseEvent.CLICK, viewClickedHandler);
+				// TODO: move these into the navPanel class, nad get it to dispatch relevant events
+				navPopup.homeButton.addEventListener(MouseEvent.CLICK, homeButtonClickHandler);
+				navPopup.replayButton.addEventListener(MouseEvent.CLICK, replayButtonClickHandler);
+			}
+			
+			protected function viewClickedHandler(event:MouseEvent):void
+			{
+				// If this is a click event after just having closed the nav, reset and ignore the event
+				if(hasJustClosed)
+					hasJustClosed = false;
+				else {
+					this.removeEventListener(MouseEvent.CLICK, viewClickedHandler);
+					navPopup.visible = true;
+					bookViewer.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDownHandler);
+				}
+			}
+			
+			protected function viewMouseDownHandler(event:MouseEvent):void
+			{ 
+				bookViewer.removeEventListener(MouseEvent.MOUSE_DOWN, viewMouseDownHandler);
+				navPopup.visible = false;
+				hasJustClosed = true;
+				this.addEventListener(MouseEvent.CLICK, viewClickedHandler);
+			}
+			
+			protected function homeButtonClickHandler(event:MouseEvent):void
+			{
+				dispatchEvent(new BookReaderEvent(BookReaderEvent.HOME_BUTTON_SELECTED,true));
+			}
+			
+			protected function replayButtonClickHandler(event:MouseEvent):void
+			{
+				// TODO: tell bookviewer to replay it's current audio
 			}
 			
 		]]>
 	</fx:Script>
-	<components:BookViewer bookData="{data}"/>
-	<components:NavPopup bottom="20" horizontalCenter="0">
-	</components:NavPopup>
+	<components:BookViewer id="bookViewer" bookData="{data}"/>
+	<components:NavPanel id="navPopup" visible="false" bottom="100" horizontalCenter="0"/>
 </s:View>
