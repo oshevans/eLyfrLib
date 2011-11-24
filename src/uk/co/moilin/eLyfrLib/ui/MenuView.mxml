@@ -19,20 +19,18 @@
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				var seriesData:SeriesData = data as SeriesData;
+				
 				seriesTitle.text = seriesData.title;
-				// TODO: create itemRenderer for items
 				bookList.dataProvider = new ArrayCollection(seriesData.books);
-				// TODO: sort out infoText to be half width and to wrap
 				infoText.text = seriesData.infoText;
 				
 				// TODO: implement seriesData.themeStyle
 				
 				// TODO: font size should be based on device DPI
 				
-				// TODO: positions to be based on orientation??
 				
-				// TODO initialise logo
-				// TODO initialise audio checkbox
+				// TODO create logo
+				// TODO create audio checkbox
 			}
 			
 			protected function bookListChangeHandler(event:IndexChangeEvent):void
@@ -43,21 +41,30 @@
 		]]>
 	</fx:Script>
 	
-	<s:Group width="100%" height="160">
-		<s:Rect width="100%" height="100%">	
-			<s:fill>
-				<s:SolidColor color="#BBD5EC"/>
-			</s:fill>
-		</s:Rect>
-		<s:Label id="seriesTitle" x="60" text="Series Title" fontSize="60" height="100%" verticalAlign="middle" color="#4B311A"/>
-	</s:Group>
-	<s:List id="bookList" 
-			y="200" width="70%" height="50%" horizontalCenter="0"
-			horizontalScrollPolicy="off"
-			itemRenderer="uk.co.moilin.eLyfrLib.ui.components.MenuItemRenderer"
-			contentBackgroundColor="#BDD2E7"
-			change="bookListChangeHandler(event)" />
-	<s:CalloutButton bottom="20" left="20" label="info">
-		<s:TextArea id="infoText" editable="false" selectable="false" x="10" y="10" width="400" height="400" text="info"/>
-	</s:CalloutButton>
+	<s:VGroup width="100%" height="100%" gap="20" horizontalAlign="center">
+		<s:Group width="100%" height="160">
+			<s:Rect width="100%" height="100%">	
+				<s:fill>
+					<s:SolidColor color="#BBD5EC"/>
+				</s:fill>
+			</s:Rect>
+			<s:Label id="seriesTitle" x="60" text="Series Title" fontSize="60" height="100%" verticalAlign="middle" color="#4B311A"/>
+		</s:Group>
+		<s:List id="bookList" 
+				width="70%" height="100%" horizontalCenter="0" verticalCenter="0"
+				horizontalScrollPolicy="off"
+				itemRenderer="uk.co.moilin.eLyfrLib.ui.components.MenuItemRenderer"
+				contentBackgroundColor="#BDD2E7"
+				change="bookListChangeHandler(event)" />
+		<s:Group>
+			<s:CalloutButton bottom="20" left="20" label="info">
+				<s:TextArea id="infoText"
+							editable="false" selectable="false"
+							width="400" height="400"
+							paddingBottom="20" paddingLeft="20" paddingRight="20" paddingTop="20"
+							borderVisible="false"
+							text="info"/>
+			</s:CalloutButton>
+		</s:Group>
+	</s:VGroup>
 </s:View>

@@ -2,13 +2,15 @@
 <s:ItemRenderer xmlns:fx="http://ns.adobe.com/mxml/2009" 
 				xmlns:s="library://ns.adobe.com/flex/spark" 
 				xmlns:mx="library://ns.adobe.com/flex/mx"
-				alternatingItemColors="[#76AD38,#63912F]"
+				alternatingItemColors="#63912F"
 				autoDrawBackground="true">
 	<fx:Script>
 		<![CDATA[
 			import uk.co.moilin.eLyfrLib.data.BookData;
 			
 			// TODO: font size should be based on device DPI
+			
+			// TODO: make thumbnails square, and twice the height
 		]]>
 	</fx:Script>
 	<s:layout>

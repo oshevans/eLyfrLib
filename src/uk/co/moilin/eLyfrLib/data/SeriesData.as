@@ -2,21 +2,36 @@ package uk.co.moilin.eLyfrLib.data
 {
 	import mx.charts.chartClasses.Series;
 
+	/**
+	 * Contains all data for the series of books 
+	 * @author oevans
+	 * 
+	 */
 	public class SeriesData
 	{
-		public var title:String;
-		public var logo:String;
-		public var themeStyles:ThemeStyles
-		public var infoText:String;
-		public var books:Array;
+		private var _title:String;
+		public function get title():String { return _title };
+
+		private var _logo:String;
+		public function get logo():String { return _logo };
+
+		private var _themeStyles:ThemeStyles
+		public function get themeStyles():ThemeStyles { return _themeStyles };
+
+		private var _infoText:String;
+		public function get infoText():String { return _infoText };
+
+		private var _books:Array;
+		public function get books():Array { return _books };
+
 		
 		public function SeriesData(rawData:XML)
 		{
-			title = rawData.title;
-			logo = rawData.logo;
-//			themeStyles = new ThemeStyles(rawData.themeStyles);
-			infoText = rawData.infoText;
-			books = new Array();
+			_title = rawData.title;
+			_logo = rawData.logo;
+//			_themeStyles = new ThemeStyles(rawData.themeStyles);
+			_infoText = rawData.infoText;
+			_books = new Array();
 			for each (var book:XML in rawData.books.book)
 			{
 				books.push(new BookData(book));

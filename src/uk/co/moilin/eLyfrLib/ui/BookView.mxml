@@ -17,39 +17,42 @@
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				this.addEventListener(MouseEvent.CLICK, viewClickedHandler);
-				// TODO: move these into the navPanel class, nad get it to dispatch relevant events
-				navPopup.homeButton.addEventListener(MouseEvent.CLICK, homeButtonClickHandler);
-				navPopup.replayButton.addEventListener(MouseEvent.CLICK, replayButtonClickHandler);
+				navPopup.addEventListener(BookReaderEvent.REPLAY_REQUEST, replayRequestHandler);
 			}
 			
 			protected function viewClickedHandler(event:MouseEvent):void
 			{
-				// If this is a click event after just having closed the nav, reset and ignore the event
-				if(hasJustClosed)
-					hasJustClosed = false;
-				else {
-					this.removeEventListener(MouseEvent.CLICK, viewClickedHandler);
-					navPopup.visible = true;
-					bookViewer.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDownHandler);
-				}
+				hideNavPanel(true);
 			}
 			
 			protected function viewMouseDownHandler(event:MouseEvent):void
-			{ 
-				bookViewer.removeEventListener(MouseEvent.MOUSE_DOWN, viewMouseDownHandler);
-				navPopup.visible = false;
-				hasJustClosed = true;
-				this.addEventListener(MouseEvent.CLICK, viewClickedHandler);
+			{
+				hideNavPanel(false);
 			}
 			
-			protected function homeButtonClickHandler(event:MouseEvent):void
+			protected function replayRequestHandler(event:BookReaderEvent):void
 			{
-				dispatchEvent(new BookReaderEvent(BookReaderEvent.HOME_BUTTON_SELECTED,true));
+				hideNavPanel(false);
+				bookViewer.replayAudio();
 			}
 			
-			protected function replayButtonClickHandler(event:MouseEvent):void
+			private function hideNavPanel(show:Boolean):void
 			{
-				// TODO: tell bookviewer to replay it's current audio
+				if(show)
+				{
+					if(hasJustClosed) // we're in closing mode, so don't wshow it again
+						hasJustClosed = false;
+					else {
+						this.removeEventListener(MouseEvent.CLICK, viewClickedHandler);
+						navPopup.visible = true;
+						bookViewer.addEventListener(MouseEvent.MOUSE_DOWN, viewMouseDownHandler);
+					}
+				} else {
+					bookViewer.removeEventListener(MouseEvent.MOUSE_DOWN, viewMouseDownHandler);
+					navPopup.visible = false;
+					hasJustClosed = true;
+					this.addEventListener(MouseEvent.CLICK, viewClickedHandler);
+				}
 			}
 			
 		]]>

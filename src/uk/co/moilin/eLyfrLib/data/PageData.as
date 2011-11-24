@@ -10,13 +10,16 @@ package uk.co.moilin.eLyfrLib.data
 
 	public class PageData
 	{
-		public var pageImageURL:String;
-		public var pageAudioURL:String;
+		private var _pageImageURL:String;
+		public function get pageImageURL():String { return _pageImageURL };
+
+		private var _pageAudioURL:String;
+		public function get pageAudioURL():String { return _pageAudioURL };
 		
 		public function PageData(rawData:XML)
 		{
-			pageImageURL = rawData.image;
-			pageAudioURL = rawData.audio;
+			_pageImageURL = rawData.image;
+			_pageAudioURL = rawData.audio;
 		}
 		
 	}

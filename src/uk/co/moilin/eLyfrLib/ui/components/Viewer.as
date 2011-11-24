@@ -56,9 +56,15 @@ package uk.co.moilin.eLyfrLib.ui.components
 		}
 		
 		/**
-		 * Initialises the viewer
+		 * Replays the audio for the current page(s) 
 		 * 
 		 */
+		public function replayAudio():void
+		{
+			playAudio();
+		}
+		
+		// OVERRIDES
 		override public function initialize():void
 		{
 			trace("BookReader: initialize");
@@ -74,7 +80,8 @@ package uk.co.moilin.eLyfrLib.ui.components
 			pageViewer.addEventListener(TouchInteractionEvent.TOUCH_INTERACTION_END, pageChangedHandler, false, 0, true);
 			
 			setSizes();
-			playAudio();
+			// TODO: need to add delay before playing sound - delay by 1 second
+			setAudio(0);
 		}
 		
 		// FUNCTIONS
@@ -117,6 +124,17 @@ package uk.co.moilin.eLyfrLib.ui.components
 		}
 		
 		/**
+		 * Sets the sound object for the current page(s)
+		 * @param pageIndex - index for page data
+		 * 
+		 */
+		protected function setAudio(pageIndex:uint):void
+		{
+			_pageAudio  = new Sound(new URLRequest(PageData(_bookData.pages[pageIndex]).pageAudioURL));
+			playAudio();
+		}
+		
+		/**
 		 * Plays the audio associated with the current page(s)  
 		 * 
 		 */
@@ -138,11 +156,11 @@ package uk.co.moilin.eLyfrLib.ui.components
 		protected function orientationChangeHandler(event:StageOrientationEvent):void
 		{
 			trace("BookReader: orientationChangeHandler"+event.afterOrientation);
-			// TODO: use currPage to keep track of page when changing orientation
-			trace("Watch out, we've been tipped to "+event.afterOrientation+" orientation.");
 			
+			// BUG: when originally in portrait coming from menu, then an orientation change will cause the list to appear half way down landscape screen
 			pageViewer.dataProvider = _pageSpreadData = new ArrayCollection(getPageSpreadData());
 			
+			// TODO: reset pageViewer scroll position, based on currPage			
 			setSizes();
 		}
 		/**
@@ -156,9 +174,8 @@ package uk.co.moilin.eLyfrLib.ui.components
 			// TODO: change this so that the pageViewer dispatches a ViewerPageChange event that indicates the new and old pages
 			trace("BookReader: pageChangedHandler");
 			// TODO: use code from S4C DailyView to get currently viewed PageItemRenderer
-			trace("NEED TO GET CURRENT PAGE BEIGN DISPLAYED");
-			_pageAudio  = new Sound(new URLRequest(PageData(_bookData.pages[0]).pageAudioURL));
-			playAudio();
+			// TODO: this should pass in currentPage index
+			setAudio(0); 
 		}
 	}
 }

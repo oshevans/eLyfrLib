@@ -118,7 +118,7 @@ package uk.co.moilin.eLyfrLib
 			trace("BookReader: menuItemSelectedHandler");
 			
 			mainView.pushView(BookView, seriesData.books[event.selectedBook]);
-			mainView.addEventListener(BookReaderEvent.HOME_BUTTON_SELECTED, homeSelectedHandler);
+			mainView.addEventListener(BookReaderEvent.HOME_REQUEST, homeRequestHandler);
 		}
 		
 		/**
@@ -127,10 +127,10 @@ package uk.co.moilin.eLyfrLib
 		 * @param event
 		 * 
 		 */
-		protected function homeSelectedHandler(event:Event):void
+		protected function homeRequestHandler(event:Event):void
 		{
 			trace("BookReader: homeSelectedHandler");
-			mainView.removeEventListener(BookReaderEvent.HOME_BUTTON_SELECTED, homeSelectedHandler);
+			mainView.removeEventListener(BookReaderEvent.HOME_REQUEST, homeRequestHandler);
 			
 			// Pop to the menu view
 			mainView.popToFirstView();

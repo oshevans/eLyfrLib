@@ -10,7 +10,7 @@
 			selectionColor="#ffffff"
 			itemRenderer="uk.co.moilin.eLyfrLib.ui.components.PageItemRenderer">
 		<s:layout>
-			<s:HorizontalLayout gap="0" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" verticalAlign="middle" />
+			<s:HorizontalLayout gap="0" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"/>
 		</s:layout>
 	</s:List>
 </components:Viewer>
