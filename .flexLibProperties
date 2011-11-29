@@ -17,6 +17,9 @@
     <classEntry path="uk.co.moilin.eLyfrLib.model.AssetCache"/>
     <classEntry path="uk.co.moilin.eLyfrLib.BookReader"/>
     <classEntry path="uk.co.moilin.eLyfrLib.ui.components.Viewer"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.utils.AudioPlayer"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.ui.components.PageList"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.events.PageListEvent"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

@@ -33,6 +33,8 @@
 				swfLoader1 = AssetCache.getSWFLoaderInstance(spreadData.page1.pageImageURL);
 				swfLoader1.width = AppModel.getWidth();
 				swfLoader1.height = AppModel.getHeight();
+				
+// TODO: how to handle different dimensions - pillarbox, letterbox 
 
 				swfContainer.addElement(swfLoader1);
 

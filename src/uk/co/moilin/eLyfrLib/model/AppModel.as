@@ -13,11 +13,12 @@ package uk.co.moilin.eLyfrLib.model
 		public static const IS_PORTRAIT:String = "is_portrait";
 		public static const IS_LANDSCAPE:String = "is_landscape";
 		
-		public static var theStage:Stage;
+		private static var _theStage:Stage;
+		public static function get theStage():Stage { return _theStage };
+		public static function set theStage(value:Stage):void { _theStage = value };
 		
 		public static function get orientation():String
 		{
-			trace("stage: "+theStage);
 			return theStage.stageWidth >= theStage.stageHeight ? StageAspectRatio.LANDSCAPE : StageAspectRatio.PORTRAIT;
 		}
 		
@@ -29,7 +30,6 @@ package uk.co.moilin.eLyfrLib.model
 				rtrn = Capabilities.screenResolutionY > Capabilities.screenResolutionX ? Capabilities.screenResolutionY : Capabilities.screenResolutionX;
 			else
 				rtrn = Capabilities.screenResolutionY < Capabilities.screenResolutionX ? Capabilities.screenResolutionY : Capabilities.screenResolutionX;
-			trace("HEIGHT: "+rtrn);			
 			return rtrn;
 		}
 		
@@ -40,7 +40,6 @@ package uk.co.moilin.eLyfrLib.model
 				rtrn = Capabilities.screenResolutionX > Capabilities.screenResolutionY ? Capabilities.screenResolutionX : Capabilities.screenResolutionY;
 			else
 				rtrn = Capabilities.screenResolutionX < Capabilities.screenResolutionY ? Capabilities.screenResolutionX : Capabilities.screenResolutionY;
-			trace("WIDTH: "+rtrn);
 			return rtrn;
 		}
 	}

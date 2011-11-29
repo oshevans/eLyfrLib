@@ -1,5 +1,6 @@
 package uk.co.moilin.eLyfrLib
 {
+	import flash.display.StageOrientation;
 	import flash.errors.IOError;
 	import flash.events.Event;
 	import flash.net.URLLoader;
@@ -88,8 +89,6 @@ package uk.co.moilin.eLyfrLib
 			rawSeriesData = new XML(URLLoader(event.target).data);
 			seriesData = new SeriesData(rawSeriesData);
 			
-			// TODO: set orientation policy based on config data - e.g. some books are landscape only
-			
 			// Set up the menu
 			initMenu();
 		}
@@ -131,6 +130,9 @@ package uk.co.moilin.eLyfrLib
 		{
 			trace("BookReader: homeSelectedHandler");
 			mainView.removeEventListener(BookReaderEvent.HOME_REQUEST, homeRequestHandler);
+			
+// TODO: move this to the bookview event handler for homeRequest event
+			AppModel.theStage.autoOrients = true;
 			
 			// Pop to the menu view
 			mainView.popToFirstView();

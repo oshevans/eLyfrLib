@@ -4,13 +4,12 @@
 		 xmlns:mx="library://ns.adobe.com/flex/mx"
 		 xmlns:ui="uk.co.moilin.eLyfrLib.ui.*"
 		 xmlns:components="uk.co.moilin.eLyfrLib.ui.components.*">
-	
-	<s:List id="pageViewer" 
-			verticalScrollPolicy="off" pageScrollingEnabled="true"
-			selectionColor="#ffffff"
-			itemRenderer="uk.co.moilin.eLyfrLib.ui.components.PageItemRenderer">
-		<s:layout>
+	<components:PageList id="pageViewer"
+						 verticalScrollPolicy="off" pageScrollingEnabled="true"
+						 selectionColor="#ffffff"
+						 itemRenderer="uk.co.moilin.eLyfrLib.ui.components.PageItemRenderer">
+		<components:layout>
 			<s:HorizontalLayout gap="0" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"/>
-		</s:layout>
-	</s:List>
+		</components:layout>
+	</components:PageList>
 </components:Viewer>

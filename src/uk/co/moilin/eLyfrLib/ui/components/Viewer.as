@@ -1,6 +1,7 @@
 package uk.co.moilin.eLyfrLib.ui.components
 {
 	import flash.display.StageAspectRatio;
+	import flash.display.StageOrientation;
 	import flash.events.StageOrientationEvent;
 	import flash.media.Sound;
 	import flash.media.SoundMixer;
@@ -15,23 +16,25 @@ package uk.co.moilin.eLyfrLib.ui.components
 	import uk.co.moilin.eLyfrLib.data.BookData;
 	import uk.co.moilin.eLyfrLib.data.PageData;
 	import uk.co.moilin.eLyfrLib.data.PageSpreadData;
+	import uk.co.moilin.eLyfrLib.events.PageListEvent;
 	import uk.co.moilin.eLyfrLib.model.AppModel;
 	import uk.co.moilin.eLyfrLib.model.AssetCache;
+	import uk.co.moilin.eLyfrLib.utils.AudioPlayer;
 	
 	public class Viewer extends Group
 	{
 		// ELEMENTS
-		public var pageViewer:List;
+		public var pageViewer:PageList;
 		
 		// PROPERTIES
 		
 		// VARS
 		protected var _bookData:BookData;
 		protected var _pageSpreadData:ArrayCollection;
-		
-		protected var _pageAudio:Sound;
+		protected var _currentPage:uint = 0;
 		
 		// METHODS
+		private var _isSingleSpread:Boolean;
 		public function Viewer()
 		{
 			super();
@@ -44,11 +47,13 @@ package uk.co.moilin.eLyfrLib.ui.components
 		 */
 		public function set bookData(value:BookData):void
 		{
-			trace("BookReader: initialize");
+			trace("BookReader: set bookData");
 			
 			_bookData = value;
 			
 			AssetCache.initialiseCache(_bookData.pages);
+			
+			setOrientationPolicy();
 			
 			_pageSpreadData = new ArrayCollection(getPageSpreadData());
 			
@@ -61,7 +66,7 @@ package uk.co.moilin.eLyfrLib.ui.components
 		 */
 		public function replayAudio():void
 		{
-			playAudio();
+			AudioPlayer.playAudio();
 		}
 		
 		// OVERRIDES
@@ -77,11 +82,11 @@ package uk.co.moilin.eLyfrLib.ui.components
 		{
 			super.childrenCreated();
 			
-			pageViewer.addEventListener(TouchInteractionEvent.TOUCH_INTERACTION_END, pageChangedHandler, false, 0, true);
+			pageViewer.addEventListener(PageListEvent.PAGE_CHANGE, pageChangedHandler, false, 0, true);
 			
 			setSizes();
-			// TODO: need to add delay before playing sound - delay by 1 second
-			setAudio(0);
+			
+			AudioPlayer.setSpreadAudio(PageSpreadData(_pageSpreadData[_currentPage])); 
 		}
 		
 		// FUNCTIONS
@@ -96,15 +101,20 @@ package uk.co.moilin.eLyfrLib.ui.components
 			var numPages:uint = _bookData.pages.length;
 			var spreadData:Array = new Array();
 			
+			_isSingleSpread = (AppModel.orientation==StageAspectRatio.PORTRAIT || _bookData.aspectRatio==StageAspectRatio.LANDSCAPE);
+			
 			for (var i:uint=0 ; i < numPages ; i++)
 			{
-				// TODO: how to get reference to Stage?
-				if(AppModel.orientation == StageAspectRatio.PORTRAIT)
+				if(i==0) // first page is always a single page spread
 				{
 					spreadData.push(new PageSpreadData(_bookData.pages[i]));
-				} else {
-					spreadData.push(new PageSpreadData(_bookData.pages[i], _bookData.pages[++i]));
+					continue;
 				}
+					
+				if(_isSingleSpread)
+					spreadData.push(new PageSpreadData(_bookData.pages[i]));
+				else
+					spreadData.push(new PageSpreadData(_bookData.pages[i], _bookData.pages[++i]));
 			}
 			
 			return spreadData;
@@ -124,26 +134,17 @@ package uk.co.moilin.eLyfrLib.ui.components
 		}
 		
 		/**
-		 * Sets the sound object for the current page(s)
-		 * @param pageIndex - index for page data
+		 * Sets the orientation policy for the app baseed on the book orientation settings
 		 * 
 		 */
-		protected function setAudio(pageIndex:uint):void
+		protected function setOrientationPolicy():void
 		{
-			_pageAudio  = new Sound(new URLRequest(PageData(_bookData.pages[pageIndex]).pageAudioURL));
-			playAudio();
-		}
-		
-		/**
-		 * Plays the audio associated with the current page(s)  
-		 * 
-		 */
-		protected function playAudio():void
-		{
-			SoundMixer.stopAll();
-			trace("BookReader: playAudio");
-			if(_pageAudio != null)
-				_pageAudio.play();
+// BUG: this needs to be based on current device aspectRatio (stage.aspectRatio) - setting to portrait will flip stage if already in potrait/rotated_left
+			if(_bookData.aspectRatio == StageAspectRatio.LANDSCAPE || _bookData.aspectRatio == StageAspectRatio.PORTRAIT)
+			{
+				AppModel.theStage.autoOrients = false;
+				AppModel.theStage.setAspectRatio(_bookData.aspectRatio);
+			}
 		}
 		
 		// EVENT HANDLERS
@@ -155,27 +156,18 @@ package uk.co.moilin.eLyfrLib.ui.components
 		 */
 		protected function orientationChangeHandler(event:StageOrientationEvent):void
 		{
-			trace("BookReader: orientationChangeHandler"+event.afterOrientation);
-			
-			// BUG: when originally in portrait coming from menu, then an orientation change will cause the list to appear half way down landscape screen
+			pageViewer.currentPage = _isSingleSpread ? _currentPage : _currentPage / 2;
 			pageViewer.dataProvider = _pageSpreadData = new ArrayCollection(getPageSpreadData());
-			
-			// TODO: reset pageViewer scroll position, based on currPage			
+
 			setSizes();
 		}
-		/**
-		 * Handles the pageViewer 'page change' event when the list is scrolled
-		 * Plays the page audio
-		 * @param event TouchInteractionEvent
-		 * 
-		 */
-		protected function pageChangedHandler(event:TouchInteractionEvent):void
+		
+		protected function pageChangedHandler(event:PageListEvent):void
 		{
-			// TODO: change this so that the pageViewer dispatches a ViewerPageChange event that indicates the new and old pages
-			trace("BookReader: pageChangedHandler");
-			// TODO: use code from S4C DailyView to get currently viewed PageItemRenderer
-			// TODO: this should pass in currentPage index
-			setAudio(0); 
+			trace("OLD: "+event.oldIndex+", NEW: "+event.newIndex+", single: "+_isSingleSpread);
+			_currentPage = _isSingleSpread ? event.newIndex : event.newIndex * 2;
+			// Pass the current Spread to the audio player
+			AudioPlayer.setSpreadAudio(_pageSpreadData[event.newIndex] as PageSpreadData);
 		}
 	}
 }

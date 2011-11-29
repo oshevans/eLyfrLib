@@ -21,6 +21,7 @@ package uk.co.moilin.eLyfrLib.model
 				swfLoader.setStyle("verticalAlign", "middle");
 				swfLoader.scaleContent = true;
 				swfLoader.cacheAsBitmap = true;
+				swfLoader.smoothBitmapContent = true;
 				swfLoader.source = pageData.pageImageURL;
 // TODO: I don't think this is loading them properly, as there is a big delay when each page is loaded for the first time
 // TODO: it also seems to be removed after a period of time - leaving the book for a while means that there is again a big delay when each page is loaded for the first time
