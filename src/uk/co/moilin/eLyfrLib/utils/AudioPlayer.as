@@ -25,10 +25,6 @@ package uk.co.moilin.eLyfrLib.utils
 		 */
 		public static function setSpreadAudio(spreadData:PageSpreadData):void
 		{
-			// TODO: need to add delay before playing sound - delay by 1 second
-			// TODO: change to _firstPageAudio and add _secondPageAudio
-			// TODO: play second page audio once first one has completed
-			
 			_firstPageAudio = new Sound(new URLRequest(spreadData.page1.pageAudioURL));
 			if(!spreadData.isSingle)
 				_secondPageAudio = new Sound(new URLRequest(spreadData.page2.pageAudioURL));

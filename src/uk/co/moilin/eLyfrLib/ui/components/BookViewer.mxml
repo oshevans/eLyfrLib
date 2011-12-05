@@ -12,4 +12,14 @@
 			<s:HorizontalLayout gap="0" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"/>
 		</components:layout>
 	</components:PageList>
+	
+	
+	<s:Group id="prevButton" width="100" height="100%" left="0" verticalCenter="0">
+		<s:Button skinClass="uk.co.moilin.eLyfrLib.skins.PrevButton"
+				  left="0" verticalCenter="0" />
+	</s:Group>
+	<s:Group id="nextButton" width="100" height="100%" right="0" verticalCenter="0">
+		<s:Button skinClass="uk.co.moilin.eLyfrLib.skins.NextButton" 
+				  right="0" verticalCenter="0" />
+	</s:Group>
 </components:Viewer>

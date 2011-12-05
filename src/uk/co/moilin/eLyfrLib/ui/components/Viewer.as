@@ -2,6 +2,8 @@ package uk.co.moilin.eLyfrLib.ui.components
 {
 	import flash.display.StageAspectRatio;
 	import flash.display.StageOrientation;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.events.StageOrientationEvent;
 	import flash.media.Sound;
 	import flash.media.SoundMixer;
@@ -25,6 +27,8 @@ package uk.co.moilin.eLyfrLib.ui.components
 	{
 		// ELEMENTS
 		public var pageViewer:PageList;
+		public var prevButton:Group;
+		public var nextButton:Group;
 		
 		// PROPERTIES
 		
@@ -87,6 +91,19 @@ package uk.co.moilin.eLyfrLib.ui.components
 			setSizes();
 			
 			AudioPlayer.setSpreadAudio(PageSpreadData(_pageSpreadData[_currentPage])); 
+			
+			// Add event listeners for nav buttons
+			if(_bookData.navMode == BookData.NAV_MODE_BUTTONS)
+			{
+// TODO: should have 3 nav modes - buttons, swipe, both
+				//pageViewer.setStyle("horizontalScrollPolicy", "off");
+				prevButton.addEventListener(MouseEvent.CLICK, prevButtonClickHandler, false, 0, true);
+				nextButton.addEventListener(MouseEvent.CLICK, nextButtonClickHandler, false, 0, true);
+			} else {
+				prevButton.visible = false;
+				nextButton.visible = false;
+			}
+
 		}
 		
 		// FUNCTIONS
@@ -168,6 +185,22 @@ package uk.co.moilin.eLyfrLib.ui.components
 			_currentPage = _isSingleSpread ? event.newIndex : event.newIndex * 2;
 			// Pass the current Spread to the audio player
 			AudioPlayer.setSpreadAudio(_pageSpreadData[event.newIndex] as PageSpreadData);
+		}
+		
+		private function prevButtonClickHandler(e:Event):void {
+			e.stopImmediatePropagation();
+			trace("Go to previous page");
+			pageViewer.currentPage -= 1;
+			_currentPage = _isSingleSpread ? pageViewer.currentPage : pageViewer.currentPage * 2;
+			pageViewer.gotoPage(pageViewer.currentPage);
+		}
+		
+		private function nextButtonClickHandler(e:Event):void {
+			e.stopImmediatePropagation();
+			trace("Go to next page");
+			pageViewer.currentPage += 1;
+			_currentPage = _isSingleSpread ? pageViewer.currentPage : pageViewer.currentPage * 2;
+			pageViewer.gotoPage(pageViewer.currentPage);
 		}
 	}
 }
