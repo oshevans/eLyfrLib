@@ -54,15 +54,15 @@ package uk.co.moilin.eLyfrLib.data
 		/**
 		 * Determins required navMode for book 
 		 * @param mode requested navMode from config data
-		 * @return 'buttons' or 'swipe'(default)
+		 * @return 'buttons'(default) or 'swipe'
 		 * 
 		 */
 		private function getNavMode(mode:String):String
 		{
-			if(mode == BookData.NAV_MODE_BUTTONS)
-				return BookData.NAV_MODE_BUTTONS;
-			else
+			if(mode == BookData.NAV_MODE_SWIPE)
 				return BookData.NAV_MODE_SWIPE;
+			else
+				return BookData.NAV_MODE_BUTTONS;
 		}
 		
 	}

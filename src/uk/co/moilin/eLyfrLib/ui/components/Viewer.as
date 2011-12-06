@@ -26,7 +26,7 @@ package uk.co.moilin.eLyfrLib.ui.components
 	public class Viewer extends Group
 	{
 		// ELEMENTS
-		public var pageViewer:PageList;
+		public var pageViewer:PageViewer;
 		public var prevButton:Group;
 		public var nextButton:Group;
 		
@@ -35,10 +35,8 @@ package uk.co.moilin.eLyfrLib.ui.components
 		// VARS
 		protected var _bookData:BookData;
 		protected var _pageSpreadData:ArrayCollection;
-		protected var _currentPage:uint = 0;
 		
 		// METHODS
-		private var _isSingleSpread:Boolean;
 		public function Viewer()
 		{
 			super();
@@ -90,13 +88,12 @@ package uk.co.moilin.eLyfrLib.ui.components
 			
 			setSizes();
 			
-			AudioPlayer.setSpreadAudio(PageSpreadData(_pageSpreadData[_currentPage])); 
+			AudioPlayer.setSpreadAudio(PageSpreadData(_pageSpreadData[pageViewer.currentSpread])); 
 			
-			// Add event listeners for nav buttons
+			// initialise nav mode
 			if(_bookData.navMode == BookData.NAV_MODE_BUTTONS)
 			{
-// TODO: should have 3 nav modes - buttons, swipe, both
-				//pageViewer.setStyle("horizontalScrollPolicy", "off");
+				pageViewer.setStyle("horizontalScrollPolicy", "off");
 				prevButton.addEventListener(MouseEvent.CLICK, prevButtonClickHandler, false, 0, true);
 				nextButton.addEventListener(MouseEvent.CLICK, nextButtonClickHandler, false, 0, true);
 			} else {
@@ -118,7 +115,7 @@ package uk.co.moilin.eLyfrLib.ui.components
 			var numPages:uint = _bookData.pages.length;
 			var spreadData:Array = new Array();
 			
-			_isSingleSpread = (AppModel.orientation==StageAspectRatio.PORTRAIT || _bookData.aspectRatio==StageAspectRatio.LANDSCAPE);
+			pageViewer.isSingleSpread = (AppModel.orientation==StageAspectRatio.PORTRAIT || _bookData.aspectRatio==StageAspectRatio.LANDSCAPE);
 			
 			for (var i:uint=0 ; i < numPages ; i++)
 			{
@@ -128,7 +125,7 @@ package uk.co.moilin.eLyfrLib.ui.components
 					continue;
 				}
 					
-				if(_isSingleSpread)
+				if(pageViewer.isSingleSpread)
 					spreadData.push(new PageSpreadData(_bookData.pages[i]));
 				else
 					spreadData.push(new PageSpreadData(_bookData.pages[i], _bookData.pages[++i]));
@@ -173,7 +170,6 @@ package uk.co.moilin.eLyfrLib.ui.components
 		 */
 		protected function orientationChangeHandler(event:StageOrientationEvent):void
 		{
-			pageViewer.currentPage = _isSingleSpread ? _currentPage : _currentPage / 2;
 			pageViewer.dataProvider = _pageSpreadData = new ArrayCollection(getPageSpreadData());
 
 			setSizes();
@@ -181,26 +177,24 @@ package uk.co.moilin.eLyfrLib.ui.components
 		
 		protected function pageChangedHandler(event:PageListEvent):void
 		{
-			trace("OLD: "+event.oldIndex+", NEW: "+event.newIndex+", single: "+_isSingleSpread);
-			_currentPage = _isSingleSpread ? event.newIndex : event.newIndex * 2;
+			trace("OLD: "+event.oldIndex+", NEW: "+event.newIndex);
+
 			// Pass the current Spread to the audio player
 			AudioPlayer.setSpreadAudio(_pageSpreadData[event.newIndex] as PageSpreadData);
 		}
 		
-		private function prevButtonClickHandler(e:Event):void {
-			e.stopImmediatePropagation();
+		private function prevButtonClickHandler(e:Event):void
+		{
 			trace("Go to previous page");
-			pageViewer.currentPage -= 1;
-			_currentPage = _isSingleSpread ? pageViewer.currentPage : pageViewer.currentPage * 2;
-			pageViewer.gotoPage(pageViewer.currentPage);
+			e.stopImmediatePropagation();
+			pageViewer.gotoPrevPage();
 		}
 		
-		private function nextButtonClickHandler(e:Event):void {
-			e.stopImmediatePropagation();
+		private function nextButtonClickHandler(e:Event):void
+		{
 			trace("Go to next page");
-			pageViewer.currentPage += 1;
-			_currentPage = _isSingleSpread ? pageViewer.currentPage : pageViewer.currentPage * 2;
-			pageViewer.gotoPage(pageViewer.currentPage);
+			e.stopImmediatePropagation();
+			pageViewer.gotoNextPage();
 		}
 	}
 }

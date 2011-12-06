@@ -7,10 +7,6 @@ package uk.co.moilin.eLyfrLib.ui.components
 	
 	import spark.components.List;
 	import spark.components.supportClasses.ItemRenderer;
-	import spark.effects.Animate;
-	import spark.effects.animation.MotionPath;
-	import spark.effects.animation.SimpleMotionPath;
-	import spark.effects.easing.Sine;
 	import spark.events.ListEvent;
 	
 	import uk.co.moilin.eLyfrLib.events.PageListEvent;
@@ -29,14 +25,23 @@ package uk.co.moilin.eLyfrLib.ui.components
 				_currentPage = value;
 		}
 		
+		/**
+		 * Constructor
+		 */
 		public function PageList()
 		{
 			super();
 			
 			this.selectedIndex = _currentPage = 0;
-			this.addEventListener(TouchInteractionEvent.TOUCH_INTERACTION_END, pageChangedHandler, false, 0, true);
+			this.addEventListener(TouchInteractionEvent.TOUCH_INTERACTION_END, touchInteractionEndHandler, false, 0, true);
 		}
 		
+		/**
+		 * Override dataProvider property setter
+		 * reset scroll position based on current page value (when orrientation changes) 
+		 * @param value
+		 * 
+		 */
 		override public function set dataProvider(value:IList):void
 		{
 			super.dataProvider = value;
@@ -44,38 +49,14 @@ package uk.co.moilin.eLyfrLib.ui.components
 			this.layout.horizontalScrollPosition = AppModel.getWidth() * _currentPage;
 		}
 		
-		public function gotoPage(_toPage:uint):void
-		{
-			if(_toPage >= 0 && _toPage < dataProvider.length)
-			{
-				_currentPage = _toPage;
-				//this.layout.horizontalScrollPosition = AppModel.getWidth() * _currentPage;
-				animPage(this.layout.horizontalScrollPosition, AppModel.getWidth() * _currentPage);
-			}
-		}
-		
-		private function animPage(posFrom:Number, posTo:Number):void
-		{
-			
-			var animate:Animate = new Animate();
-			var easer:Sine = new Sine();
-			var paths:Vector.<MotionPath> = new Vector.<MotionPath>();
-			paths.push(new SimpleMotionPath("horizontalScrollPosition", posFrom, posTo));
-			animate.motionPaths = paths;
-			animate.duration = 1000;
-			animate.easer = easer;
-			animate.target = this.layout;
-			animate.play();
-		}
-		
 		/**
 		 * Handles the scrolling touch interaction end event
-		 * calculates the current page index and dispatches a PageListEvent.CHANGE
+		 * calculates the current page index and dispatches a PageListEvent.CHANGE event
 		 * 
 		 * @param event TouchInteractionEvent
 		 * 
 		 */
-		protected function pageChangedHandler(event:TouchInteractionEvent):void
+		protected function touchInteractionEndHandler(event:TouchInteractionEvent):void
 		{
 			if(this.pageScrollingEnabled)
 			{

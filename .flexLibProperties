@@ -20,6 +20,7 @@
     <classEntry path="uk.co.moilin.eLyfrLib.utils.AudioPlayer"/>
     <classEntry path="uk.co.moilin.eLyfrLib.ui.components.PageList"/>
     <classEntry path="uk.co.moilin.eLyfrLib.events.PageListEvent"/>
+    <classEntry path="uk.co.moilin.eLyfrLib.ui.components.PageViewer"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

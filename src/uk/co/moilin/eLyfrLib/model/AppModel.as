@@ -19,6 +19,7 @@ package uk.co.moilin.eLyfrLib.model
 		
 		public static function get orientation():String
 		{
+// TODO: this doesn't work on iOS!! It puts landscape into portrait mode
 			return theStage.stageWidth >= theStage.stageHeight ? StageAspectRatio.LANDSCAPE : StageAspectRatio.PORTRAIT;
 		}
 		
